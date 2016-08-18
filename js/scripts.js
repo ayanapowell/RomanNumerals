@@ -10,113 +10,63 @@ $(document).ready(function() {
 
   function translate(number) {
     var result = [];
+    var a = 1000;
+    var b = 900;
+    var c = 500;
+    var d = 400;
 
-    if(Math.floor(number/1000) >= 1) {
-
-      var i = 1;
-
-      do{
-        result.push("M");
-        ++i;
-      }while(i<(number/1000));
-      number = number%1000;
-    }
-
-    if(Math.floor(number/100) === 9){
-      result.push("CM");
-      number = number%900;
-    }
-
-    if(Math.floor(number/500) >= 1) {
-
-      var i = 1;
-
-      do{
-        result.push("D");
-        ++i;
-      }while(i<(number/500));
-      number = number%500;
-    }
-
-    if(Math.floor(number/100) === 4){
-      result.push("CD");
-      number = number%400;
-    }
-
-    if(Math.floor(number/100) >= 1) {
+    for (check = 1000; number > 0; check = check/10) {
+      if(Math.floor(number/check) >= 1) {
         var i = 1;
-      do{
-        result.push("C");
-        ++i;
-      }while(i<(number/100));
-      number = number%100;
+        do{
+          result.push(a);
+          ++i;
+        }while(i<=(number/check));
+
+        number = number%check;
+      }
+      if(Math.floor(number/(check/10)) === 9){
+        result.push(b);
+        number = number%(check-(check/10));
+      }
+      if(Math.floor(number/(check/2)) >= 1) {
+        var i = 1;
+        do{
+          result.push(c);
+          ++i;
+        }while(i<(number/(check/2)));
+        number = number%(check/2);
+      }
+      if(Math.floor(number/(check/10)) === 4){
+        result.push(d);
+        number = number%((check/2)-(check/10));
+      }
+      a = a/10;
+      b = b/10;
+      c = c/10;
+      d = d/10;
     }
-
-    if(Math.floor(number/10) === 9){
-      result.push("XC");
-      number = number%90;
-    }
-
-    if(Math.floor(number/50) >= 1) {
-
-      var i = 1;
-
-      do{
-        result.push("L");
-        ++i;
-      }while(i<(number/50));
-      number = number%50;
-    }
-
-    if(Math.floor(number/10)>=4) {
-      result.push("XL");
-      number = number%40;
-    }
-
-    if(Math.floor(number/10) >= 1) {
-
-      var i = 1;
-
-      do{
-        result.push("X");
-        ++i;
-      }while(i<(number/10));
-      number = number%10;
-    }
-
-    if(Math.floor(number/1)>=9) {
-      result.push("IX")
-      number = number%9;
-    }
-
-    if(Math.floor(number/5) >= 1) {
-
-      var i = 1;
-
-      do{
-        result.push("V");
-        ++i;
-      }while(i<(number/5));
-      number = number%5;
-    }
-
-    if(Math.floor(number/1)>=4) {
-      result.push("IV");
-      number = number%4;
-    }
-
-    if(Math.floor(number/1) >= 1) {
-      var i = 1;
-
-      do{
-        result.push("I");
-        ++i;
-      }while(i<(number/1));
-      number = number%1;
-    }
-
-    
     return result;
+  };
+
+  function converter(input) {
+    input = input.join("")
+
+    input = input.replace(/1000/g, "M");
+    input = input.replace(/900/g, "CM");
+    input = input.replace(/500/g, "D");
+    input = input.replace(/400/g, "CD");
+    input = input.replace(/100/g, "C");
+    input = input.replace(/90/g, "XC");
+    input = input.replace(/50/g, "L");
+    input = input.replace(/40/g, "XL");
+    input = input.replace(/10/g, "X");
+    input = input.replace(/9/g, "IX");
+    input = input.replace(/5/g, "V");
+    input = input.replace(/4/g, "IV");
+    input = input.replace(/1/g, "I");
+
+    return input;
   };
 
   $("#roman_translator").submit(function(event){
@@ -132,9 +82,9 @@ $(document).ready(function() {
     }
 
     output = translate(input);
+    output = converter(output);
 
-    alert(output.join(""));
-
+    alert(output);
     event.preventDefault();
   });
 });
